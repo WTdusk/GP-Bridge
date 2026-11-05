@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <Authors>WTdusk</Authors>
+    <Version>0.1.1</Version>
     <Company>WTdusk</Company>
     <Copyright>Copyright (c) 2026 WTdusk</Copyright>
     <TargetFramework>net10.0-windows</TargetFramework>

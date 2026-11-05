@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+COMMUNITY_PRESET_URL = "https://github.com/WTdusk/GP-Bridge-Presets"
+
 
 def application_dir() -> Path:
     if getattr(sys, "frozen", False):
@@ -30,7 +32,12 @@ def list_presets(folder: str | Path) -> list[Path]:
     root = Path(folder).expanduser()
     if not root.exists():
         return []
-    return sorted(root.rglob("*.json"))
+    return sorted(
+        path for path in root.rglob("*.json")
+        if path.name.lower() != "catalog.json"
+        and not any(part.startswith(".") or part.lower() == "templates"
+                    for part in path.relative_to(root).parts[:-1])
+    )
 
 
 def load_preset(path: str | Path) -> dict[str, Any]:

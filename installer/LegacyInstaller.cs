@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 [assembly: AssemblyCompany("WTdusk")]
 [assembly: AssemblyProduct("GP Bridge")]
+[assembly: AssemblyVersion("0.1.1.0")]
+[assembly: AssemblyFileVersion("0.1.1.0")]
 [assembly: AssemblyCopyright("Copyright (c) 2026 WTdusk")]
 
 internal static class LegacyInstallerProgram

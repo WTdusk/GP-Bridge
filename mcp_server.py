@@ -72,7 +72,7 @@ def main():
         try:
             method = req["method"]
             if method == "initialize":
-                response = result(req_id, {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "gpbridge", "version": "0.1.0"}})
+                response = result(req_id, {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "gpbridge", "version": "0.1.1"}})
             elif method == "ping":
                 response = result(req_id, {})
             elif method == "tools/list":

@@ -18,7 +18,7 @@ GP Bridge 将乐谱中的弦号、音高和演奏技法转换为 MIDI 音符、K
 
 | 文件 | 用途 |
 | --- | --- |
-| `GPBridge-Setup.exe` | 安装包，可选择安装目录，包含桌面程序、MCP 服务及内置预设 |
+| `GPBridge-Setup.exe` | 安装包，可选择安装目录，包含桌面程序和 MCP 服务 |
 | `GPBridge-portable.zip` | 便携版，解压后运行 `GPBridge.exe` |
 | `SHA256SUMS.txt` | 用于核对下载文件的 SHA-256 校验值 |
 
@@ -36,7 +36,7 @@ GPBridgeData/
 ## 快速使用
 
 1. 打开 `GPBridge.exe`，拖入或选择乐谱。
-2. 选择与音源、版本及实际 Keyswitch 设置相符的预设。
+2. 点击 **社区预设库** 下载与你的音源、版本及实际 Keyswitch 设置相符的 JSON，安装后选择它；也可以创建自己的预设。
 3. 选择导出目录；按需要调整连奏重叠、滑弦重叠、按弦分轨和自动延音。
 4. 点击 **导出 MIDI**，获得 `.vst.mid` 和 `.vst.report.json`。
 5. 在 DAW 中导入 MIDI，加载对应音源并设置路由。
@@ -62,22 +62,20 @@ GPBridgeData/
 
 多把吉他的各弦仍使用预设原有通道，例如每把吉他各自使用 1–6。请把每把吉他的轨道分别路由到独立音源实例；DAW 忽略 MIDI Port 时需要手动分配。
 
-## Shreddage 3.5 Archtop 预设
+## 社区预设库
 
-内置 **Shreddage 3.5 Archtop — TACT defaults**。独立维护版本见 [GP-Bridge-Presets](https://github.com/WTdusk/GP-Bridge-Presets)。
+[GP-Bridge-Presets](https://github.com/WTdusk/GP-Bridge-Presets) 是供所有用户共同维护、下载和分享音源预设的独立仓库，采用 **CC0 1.0**。欢迎通过 Pull Request 添加新音源、修正映射和补充实机验证记录。
 
-在 Kontakt 中：
+GP Bridge 不内置或默认指定某款音源。首次使用时，预设目录为空：
 
-1. 使用预设对应的默认 TACT Keyswitch 分配。
-2. 开启 **MIDI Guitar Mode**，音源 MIDI 输入设为 **OMNI**。
-3. Vibrato 控制器设为 **Mod Wheel / CC1**。
-4. Pitch Bend 范围设为 **±2 半音**。
+1. 在程序中点击 **社区预设库**，或打开上方链接。
+2. 从目录中选择与你实际使用的音源和版本相符的条目，阅读其验证状态和配置说明。
+3. 下载该条目的 JSON，放入 `GPBridgeData/Profiles/` 下的任意子目录，或在程序中选择它所在的文件夹。
+4. 按条目说明设置音源后，再选择预设导出 MIDI。
 
-弦 1（最高音弦）至弦 6 分别使用 MIDI 通道 1–6。默认 Hammer-on / Pull-off 重叠为 5 ticks，可在界面调整。普通泛音标记默认映射为人工泛音；自然泛音需要乐谱明确标注。GP 弯音高度 25 / 50 / 100 分别按 0.5 / 1 / 2 半音解释，上限为上行 2 半音。
+每个条目的调弦、通道、Keyswitch、CC 和弯音范围由其 JSON 定义。程序不会因仓库中的排序自动指定默认音源，也不会自动下载或覆盖本地预设。升级时保留已有用户预设。
 
-**验证状态：依据手册记录，尚未在实际 Kontakt 实例中验证。** 自定义过 TACT 分配的音源需要同步修改 JSON。详细记录见 [预设验证说明](GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.verification.md)。
-
-下载其他预设后，将 JSON 放入 `GPBridgeData/Profiles/kontakt/`，重新打开程序，或在界面选择其所在目录。
+社区仓库中的 Archtop 是首个贡献条目，其配置和验证说明由社区仓库维护。其他音源使用相同的贡献与安装流程。
 
 ## 从 PDF 创建预设
 
@@ -109,11 +107,11 @@ python app.py
 python gpbridge.py song.gpx -c mapping.example.json -o song.vst.mid
 ```
 
-使用内置 Archtop 预设和自动延音：
+使用自己安装的音源预设和自动延音（将路径替换为实际 JSON）：
 
 ```powershell
 python gpbridge.py song.gpx `
-  -c GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json `
+  -c GPBridgeData/Profiles/your-instrument.json `
   -o song.vst.mid --sustain-mode auto
 ```
 
@@ -166,7 +164,7 @@ python -m pytest -q
 - 反复记号当前按书写顺序导出一次，并给出警告。
 - 不支持 `score-timewise` MusicXML；请先导出为 `score-partwise`。
 - 不可表示为有音高音符的打击乐会报告并跳过。
-- 技法是否正确发声取决于音源设置；内置预设尚未完成 Kontakt 实机验证。
+- 技法是否正确发声取决于音源设置；各社区预设的验证状态请查看对应条目。
 - 尚未完成无开发环境的干净 Windows 系统交互验证；macOS / Linux 没有发布包。
 
 反馈时请提供版本、输入格式、预期与实际行为及转换报告，并去除个人路径。只有在你有权分享时再附乐谱。
@@ -179,4 +177,4 @@ GPX 容器实现参考了 [alphaTab 的公开格式读取实现](https://github.
 
 ---
 
-**English:** GP Bridge converts Guitar Pro GPX/GPIF and partwise MusicXML into MIDI for Kontakt/VST instruments. It provides a bilingual Windows GUI, CLI, and stdio MCP tools. Download the Windows x64 installer or portable ZIP from [Releases](https://github.com/WTdusk/GP-Bridge/releases/latest). No Python installation is required for packaged builds. Instrument profiles are maintained in [GP-Bridge-Presets](https://github.com/WTdusk/GP-Bridge-Presets). The bundled Archtop profile is documented from the manual and has not yet been verified in Kontakt. MIDI currently uses one tempo and plays repeat sections once in written order. Developer: **WTdusk**.
+**English:** GP Bridge converts Guitar Pro GPX/GPIF and partwise MusicXML into MIDI for Kontakt/VST instruments. It provides a bilingual Windows GUI, CLI, and stdio MCP tools. Download the Windows x64 installer or portable ZIP from [Releases](https://github.com/WTdusk/GP-Bridge/releases/latest). No Python installation is required for packaged builds. Instrument profiles are maintained in [GP-Bridge-Presets](https://github.com/WTdusk/GP-Bridge-Presets). No instrument profile is bundled or selected by default. Community profiles are shared under CC0; install a matching profile explicitly and check its verification status. MIDI currently uses one tempo and plays repeat sections once in written order. Developer: **WTdusk**.

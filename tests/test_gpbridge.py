@@ -34,11 +34,11 @@ def test_cli_writes_midi_and_report(tmp_path):
     assert output.with_suffix(".report.json").exists()
 
 
-def test_shreddage_archtop_tapping_mapping(tmp_path):
+def test_profile_tapping_mapping(tmp_path):
     source = tmp_path / "tapping.gpx"
     source.write_text("<Score><Beat><Duration><Value>Quarter</Value></Duration><Note><String>1</String><Fret>12</Fret><Tapping>true</Tapping></Note></Beat></Score>", encoding="utf-8")
     score = parse_gpx(source)
-    config = load_preset("GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json")
+    config = load_preset("tests/fixtures/instrument_profile.json")
     events, report = convert(score, config)
     assert score.notes[0].techniques == ["tapping"]
     assert any(message == bytes([0x90, 34, 127]) for _, message in events)
@@ -46,8 +46,8 @@ def test_shreddage_archtop_tapping_mapping(tmp_path):
     assert not validate_preset(config)
 
 
-def test_shreddage_bend_vibrato_and_legato(tmp_path):
-    config = load_preset("GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json")
+def test_profile_bend_vibrato_and_legato(tmp_path):
+    config = load_preset("tests/fixtures/instrument_profile.json")
     score = Score([
         NoteEvent(0, 120, 1, 0, 80, [], 60),
         NoteEvent(120, 120, 1, 2, 80, ["hammer_on"], 62),
@@ -65,7 +65,7 @@ def test_shreddage_bend_vibrato_and_legato(tmp_path):
 
 
 def test_upward_bends_support_half_and_whole_semitones():
-    config = load_preset("GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json")
+    config = load_preset("tests/fixtures/instrument_profile.json")
     score = Score([
         NoteEvent(0, 100, 1, 0, 90, ["bend"], 60, [(0, 0), (30, 25)]),
         NoteEvent(200, 100, 1, 0, 90, ["bend"], 60, [(0, 0), (30, 50)]),
@@ -89,7 +89,7 @@ def test_natural_and_artificial_harmonics_keep_distinct_mappings(tmp_path):
     <Note><String>1</String><Fret>12</Fret><Harmonic><Type>Natural</Type></Harmonic></Note></Beat>
     <Beat><Duration><Value>Quarter</Value></Duration>
     <Note><String>1</String><Fret>12</Fret><Harmonic><Type>Artificial</Type></Harmonic></Note></Beat></Score>""", encoding="utf-8")
-    config = load_preset("GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json")
+    config = load_preset("tests/fixtures/instrument_profile.json")
     score = parse_gpx(source)
     events, report = convert(score, config)
     assert score.notes[0].techniques == ["natural_harmonic"]
@@ -149,7 +149,7 @@ def test_musicxml_detects_tapping_and_source_slide_overlap(tmp_path):
     score = parse_gpx(source)
     assert score.notes[0].techniques == ["slide"]
     assert score.notes[1].techniques == ["tapping"]
-    config = load_preset("GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json")
+    config = load_preset("tests/fixtures/instrument_profile.json")
     events, report = convert(score, config)
     # 120 ticks on either side of the slide transition.
     assert (0 + 480 + 120, bytes([0x80, 64, 0])) in events
@@ -185,7 +185,7 @@ def test_musicxml_missing_string_infers_standard_tuning_but_not_nonstandard(tmp_
 
 
 def test_midi_is_type1_with_string_and_strum_tracks(tmp_path):
-    config = load_preset("GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json")
+    config = load_preset("tests/fixtures/instrument_profile.json")
     score = Score([
         NoteEvent(0, 120, 1, 0, 90, [], 64),
         NoteEvent(0, 120, 0, 0, 90, ["strum"], 60),
@@ -203,7 +203,7 @@ def test_midi_is_type1_with_string_and_strum_tracks(tmp_path):
 
 
 def test_midi_can_be_combined_into_one_track(tmp_path):
-    config = load_preset("GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json")
+    config = load_preset("tests/fixtures/instrument_profile.json")
     score = Score([NoteEvent(0, 120, 1, 0, 90, [], 64)], {1: 64})
     events, _ = convert(score, config)
     from gpbridge import write_midi

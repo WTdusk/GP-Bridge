@@ -29,13 +29,7 @@ installer/package-stage/
 installer/payload.zip
 *.lnk
 
-# Runtime data; retain only the reviewed bundled profile
-GPBridgeData/*
-!GPBridgeData/Profiles/
-GPBridgeData/Profiles/*
-!GPBridgeData/Profiles/kontakt/
-GPBridgeData/Profiles/kontakt/*
-!GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json
-!GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.verification.md
+# All installed presets and other runtime data are local to the user.
+GPBridgeData/
 examples/*.mid
 examples/*.report.json

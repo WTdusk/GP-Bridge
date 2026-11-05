@@ -1,0 +1,78 @@
+{
+  "preset_name": "Synthetic regression instrument",
+  "library": "Test fixtures",
+  "instrument": "Synthetic six-string MIDI target",
+  "default_channel": 1,
+  "split_tracks": true,
+  "unassigned_channel": 16,
+  "strum_channel": 15,
+  "string_channels": {
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6
+  },
+  "legato_overlap_ticks": 5,
+  "slide_overlap_ticks": 120,
+  "legato_max_interval_semitones": 2,
+  "techniques": {
+    "tapping": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 34
+        }
+      ]
+    },
+    "natural_harmonic": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 32
+        }
+      ]
+    },
+    "artificial_harmonic": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 33
+        }
+      ]
+    },
+    "slide": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 36
+        }
+      ]
+    },
+    "hammer_on": {
+      "events": []
+    },
+    "pull_off": {
+      "events": []
+    },
+    "vibrato": {
+      "events": [
+        {
+          "type": "cc",
+          "controller": 1,
+          "value": 127,
+          "offset_ticks": -1,
+          "reset_at_note_off": true,
+          "reset_value": 0
+        }
+      ]
+    },
+    "bend": {
+      "events": [],
+      "pitch_bend_range_semitones": 2,
+      "value_scale": "gp_percent_full_step",
+      "max_bend_semitones": 2
+    }
+  }
+}

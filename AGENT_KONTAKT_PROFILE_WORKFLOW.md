@@ -244,7 +244,7 @@ Kontakt 版本：
 
 ## 提交前检查清单
 
-- [ ] Profile 文件位于软件目录的 `GPBridgeData/Profiles/kontakt/`。
+- [ ] 本地使用时安装到 `GPBridgeData/Profiles/kontakt/`；社区分享时提交到 `GP-Bridge-Presets/kontakt/`，并按 CONTRIBUTING.md 更新目录及验证记录。
 - [ ] JSON 格式正确。
 - [ ] PDF 页码已记录。
 - [ ] 八度规则已确认。

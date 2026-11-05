@@ -7,7 +7,17 @@ import sys
 import pytest
 
 from gpbridge import NoteEvent, Score, convert, parse_gpx
-from preset_manager import validate_ai_profile, validate_preset
+from preset_manager import list_presets, validate_ai_profile, validate_preset
+
+
+def test_community_checkout_lists_only_installable_instrument_profiles(tmp_path):
+    files = ["catalog.json", "templates/example.json", ".git/cache.json",
+             "kontakt/guitar.json", "another-engine/bass.json"]
+    for relative in files:
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}", encoding="utf-8")
+    assert list_presets(tmp_path) == [tmp_path / "another-engine/bass.json", tmp_path / "kontakt/guitar.json"]
 
 
 @pytest.mark.parametrize("profile", [

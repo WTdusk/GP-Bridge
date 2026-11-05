@@ -1,6 +1,6 @@
 [Setup]
 AppName=GP Bridge
-AppVersion=0.1.0
+AppVersion=0.1.1
 AppPublisher=WTdusk
 DefaultDirName={localappdata}\Programs\GP Bridge
 PrivilegesRequired=lowest
@@ -22,5 +22,5 @@ Name: "{group}\GP Bridge"; Filename: "{app}\GPBridge.exe"
 Name: "{commondesktop}\GP Bridge"; Filename: "{app}\GPBridge.exe"
 
 [Dirs]
-Name: "{app}\GPBridgeData\Profiles\kontakt"
+Name: "{app}\GPBridgeData\Profiles"
 Name: "{app}\GPBridgeData\MIDI"

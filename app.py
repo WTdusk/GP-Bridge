@@ -8,13 +8,14 @@ import re
 import threading
 import ctypes
 import os
+import webbrowser
 import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
 from ai_profile import extract_profile
 from gpbridge import convert, parse_gpx, track_names_from_config, write_midi
-from preset_manager import data_dir, default_export_dir, default_preset_dir, list_presets, load_preset, validate_preset
+from preset_manager import COMMUNITY_PRESET_URL, data_dir, default_export_dir, default_preset_dir, list_presets, load_preset, validate_preset
 
 try:
     from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -30,7 +31,7 @@ STRINGS = {
         "workspace":"Workspace", "profiles":"Profiles", "reports":"Reports", "help":"?  Help", "create_profile":"＋  Create profile",
         "hero_title":"From score to sound.", "hero_subtitle":"Write in Guitar Pro. Let your Kontakt instrument perform it.",
         "import_title":"01  Import your score", "import_subtitle":"Drop a Guitar Pro file here, or browse from disk.", "drop_title":"Drop .gpx, .gpif or MusicXML", "drop_hint":"Guitar Pro XML/GPX or MusicXML", "choose_file":"Choose file", "no_score":"No score selected", "score_ready":"Score ready",
-        "instrument_title":"02  Choose your instrument", "instrument_subtitle":"Profiles define Keyswitches, CC, channels and velocity behavior.", "instrument_label":"INSTRUMENT PROFILE", "profile_dir_label":"PROFILE FOLDER · DEFAULT: SOFTWARE FOLDER / GPBRIDGEDATA / PROFILES", "choose_folder":"Choose folder", "browse":"Browse", "legato_overlap":"Legato overlap (ticks)", "slide_overlap":"Slide overlap (ticks)", "split_tracks":"Split each instrument into string tracks", "auto_sustain":"Let notes ring until the next note on that string", "strict":"Stop when a technique is unmapped", "profile_empty":"No profiles found. Create one from an official guide.", "profile_count":"{count} profile(s) available. Mappings are source-backed.",
+        "instrument_title":"02  Choose your instrument", "instrument_subtitle":"Profiles define Keyswitches, CC, channels and velocity behavior.", "instrument_label":"INSTRUMENT PROFILE", "profile_dir_label":"PROFILE FOLDER · DEFAULT: SOFTWARE FOLDER / GPBRIDGEDATA / PROFILES", "choose_folder":"Choose folder", "browse":"Browse", "legato_overlap":"Legato overlap (ticks)", "slide_overlap":"Slide overlap (ticks)", "split_tracks":"Split each instrument into string tracks", "auto_sustain":"Let notes ring until the next note on that string", "strict":"Stop when a technique is unmapped", "profile_empty":"No profiles installed. Get one from the community repository or create your own.", "profile_count":"{count} profile(s) available. Mappings are source-backed.",
         "export_title":"03  Export MIDI", "output_label":"EXPORT FOLDER", "output_default":"MIDI files will be saved to: {folder}", "output_file":"MIDI file: {path}", "export":"Export MIDI", "ready":"Ready to translate", "profile_ready":"{count} instrument profile(s) ready", "exported":"Exported {count} MIDI events", "failed":"Export failed", "profile_created":"Instrument profile created",
         "missing_title":"Missing input", "missing_message":"Choose a score, export folder and instrument profile first.", "unmapped_title":"Unmapped techniques", "export_complete":"Export complete", "export_details":"MIDI written to:\n{midi}\n\nReport:\n{report}", "help_title":"GP Bridge", "help_text":"Import a Guitar Pro score, choose a source-backed instrument profile, then export MIDI for your DAW.\n\nDefault application data folder:\n{folder}\n\nUnmapped techniques are blocked in strict mode.",
         "profile_window":"Create instrument profile", "profile_window_title":"Create a profile from the official guide", "profile_window_desc":"Only documented mappings with page references are saved. Failed or uncertain extraction creates no profile.", "pdf":"Official guide PDF", "library":"Library name", "instrument":"Instrument / preset", "model":"AI model", "endpoint":"Responses API endpoint", "api_key":"OpenAI API key", "browse_pdf":"Browse PDF", "privacy":"The PDF is sent to the configured AI endpoint. The key is used for this request only and is not saved.", "waiting":"Waiting for PDF and AI request.", "extracting":"Extracting mappings from the official PDF…", "cancel":"Cancel", "extract_create":"Extract and create", "missing_details":"Select the guide, enter library/instrument names and an API key.", "missing_details_title":"Missing details", "extract_fail":"Extraction failed. No profile was created.\n{reason}", "profile_saved":"Profile created and validated:\n{path}", "help_button":"Help"
@@ -39,7 +40,7 @@ STRINGS = {
         "workspace":"工作台", "profiles":"音源预设", "reports":"转换报告", "help":"?  帮助", "create_profile":"＋  创建预设",
         "hero_title":"从乐谱，到声音。", "hero_subtitle":"在 Guitar Pro 写谱，让 Kontakt 音源演奏。",
         "import_title":"01  导入乐谱", "import_subtitle":"拖入 Guitar Pro 文件，或从电脑中选择。", "drop_title":"拖放 .gpx、.gpif 或 MusicXML", "drop_hint":"支持 Guitar Pro XML/GPX 或 MusicXML", "choose_file":"选择乐谱", "no_score":"尚未选择乐谱", "score_ready":"乐谱已就绪",
-        "instrument_title":"02  选择音源", "instrument_subtitle":"预设定义 Keyswitch、CC、通道和力度处理方式。", "instrument_label":"音源预设", "profile_dir_label":"预设目录 · 默认位于软件目录 / GPBridgeData / Profiles", "choose_folder":"选择文件夹", "browse":"浏览", "legato_overlap":"连奏重叠 (ticks)", "slide_overlap":"滑弦重叠 (ticks)", "split_tracks":"每个乐器内部再按弦分轨", "auto_sustain":"自动延音至同弦下个音（闷音/断奏除外）", "strict":"遇到未映射技法时停止导出", "profile_empty":"没有找到预设。可从官方 Guide 创建预设。", "profile_count":"找到 {count} 个预设，映射包含来源依据。",
+        "instrument_title":"02  选择音源", "instrument_subtitle":"预设定义 Keyswitch、CC、通道和力度处理方式。", "instrument_label":"音源预设", "profile_dir_label":"预设目录 · 默认位于软件目录 / GPBridgeData / Profiles", "choose_folder":"选择文件夹", "browse":"浏览", "legato_overlap":"连奏重叠 (ticks)", "slide_overlap":"滑弦重叠 (ticks)", "split_tracks":"每个乐器内部再按弦分轨", "auto_sustain":"自动延音至同弦下个音（闷音/断奏除外）", "strict":"遇到未映射技法时停止导出", "profile_empty":"尚未安装预设。请从社区预设库下载，或自行创建。", "profile_count":"找到 {count} 个预设，映射包含来源依据。",
         "export_title":"03  导出 MIDI", "output_label":"导出文件夹", "output_default":"MIDI 文件将保存到：{folder}", "output_file":"MIDI 文件：{path}", "export":"导出 MIDI", "ready":"等待转换", "profile_ready":"已加载 {count} 个音源预设", "exported":"已导出 {count} 个 MIDI 事件", "failed":"导出失败", "profile_created":"音源预设已创建",
         "missing_title":"缺少信息", "missing_message":"请先选择乐谱、导出文件夹和音源预设。", "unmapped_title":"存在未映射技法", "export_complete":"导出完成", "export_details":"MIDI 已写入：\n{midi}\n\n报告：\n{report}", "help_title":"GP Bridge 帮助", "help_text":"导入 Guitar Pro 乐谱，选择有来源依据的音源预设，再导出 MIDI 到 DAW。\n\n默认数据目录：\n{folder}\n\n严格模式会阻止未映射技法的导出。",
         "profile_window":"创建音源预设", "profile_window_title":"从官方 Guide 创建预设", "profile_window_desc":"只保存手册明确记载且带页码的映射。提取失败或结果不确定时不会生成预设。", "pdf":"官方 Guide PDF", "library":"音色库名称", "instrument":"乐器 / 预设名称", "model":"AI 模型", "endpoint":"Responses API 地址", "api_key":"OpenAI API Key", "browse_pdf":"选择 PDF", "privacy":"PDF 会发送到所配置的 AI 接口。API Key 仅用于本次请求，不会保存。", "waiting":"等待选择 PDF 并开始提取。", "extracting":"正在从官方 PDF 提取映射…", "cancel":"取消", "extract_create":"提取并创建", "missing_details":"请选择 PDF，填写音色库和乐器名称，并输入 API Key。", "missing_details_title":"信息不完整", "extract_fail":"提取失败，未创建预设。\n{reason}", "profile_saved":"预设已创建并通过校验：\n{path}", "help_button":"帮助"
@@ -189,6 +190,7 @@ class GPBridgeApp:
         ttk.Checkbutton(card, text=self.tr("split_tracks"), variable=self.split_tracks, style="GP.TCheckbutton", command=self._save_settings).pack(anchor="w", pady=(0, 10))
         ttk.Checkbutton(card, text=self.tr("auto_sustain"), variable=self.auto_sustain, style="GP.TCheckbutton", command=self._save_settings).pack(anchor="w", pady=(0, 10))
         ttk.Checkbutton(card, text=self.tr("strict"), variable=self.strict, style="GP.TCheckbutton").pack(anchor="w", pady=(0, 15))
+        ttk.Button(card, text="Community presets" if self.language.get() == "en" else "社区预设库", style="GP.TButton", command=lambda: webbrowser.open(COMMUNITY_PRESET_URL)).pack(anchor="w", pady=(0, 6))
         self.profile_hint = tk.Label(card, text="Profiles are read from JSON and never guessed.", bg=PANEL, fg=GREEN, font=("Segoe UI", 9), wraplength=300, justify="left"); self.profile_hint.pack(anchor="w", pady=(8, 0)); return card
 
     def _footer(self, root):

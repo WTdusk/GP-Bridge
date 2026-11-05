@@ -39,10 +39,9 @@ $stagePath = [System.IO.Path]::GetFullPath((Join-Path $workspaceRoot 'installer\
 if (-not $stagePath.StartsWith($workspaceRoot.TrimEnd('\') + '\', [System.StringComparison]::OrdinalIgnoreCase)) { throw "Package stage must stay inside the workspace." }
 if (Test-Path -LiteralPath $stagePath) { Remove-Item -LiteralPath $stagePath -Recurse -Force }
 New-Item -ItemType Directory -Force (Join-Path $profileStage "Profiles") | Out-Null
-New-Item -ItemType Directory -Force (Join-Path $profileStage "Profiles\kontakt") | Out-Null
-Copy-Item "GPBridgeData\Profiles\kontakt\shreddage_3_5_archtop.json", "GPBridgeData\Profiles\kontakt\shreddage_3_5_archtop.verification.md" (Join-Path $profileStage "Profiles\kontakt") -Force
-New-Item -ItemType Directory -Force "dist\GPBridgeData\Profiles" | Out-Null
-Copy-Item (Join-Path $profileStage "Profiles\*") "dist\GPBridgeData\Profiles" -Recurse -Force
+# Ship installation instructions only. Instrument profiles are maintained by
+# the community and installed explicitly; never package local user presets.
+Copy-Item "profiles\README.md" (Join-Path $profileStage "Profiles\README.md") -Force
 Compress-Archive -Path "dist\GPBridge.exe", "dist\GPBridgeMCP.exe", "README.md", "AUTHORS.md", "THIRD_PARTY_NOTICES.md", "licenses", "mcp-config.example.json", "AGENT_KONTAKT_PROFILE_WORKFLOW.md", "assets", "profiles", $profileStage -DestinationPath $archive -CompressionLevel Optimal
 Write-Host "Built dist\GPBridge.exe"
 Write-Host "Built $archive"
