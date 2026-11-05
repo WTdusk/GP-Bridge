@@ -1,0 +1,17 @@
+<Score>
+  <Tempo>120</Tempo>
+  <Track>
+    <Strings>
+      <String number="1"><Pitch>64</Pitch></String>
+      <String number="2"><Pitch>59</Pitch></String>
+      <String number="3"><Pitch>55</Pitch></String>
+      <String number="4"><Pitch>50</Pitch></String>
+      <String number="5"><Pitch>45</Pitch></String>
+      <String number="6"><Pitch>38</Pitch></String>
+    </Strings>
+    <Measure><Beat><Duration><Value>Quarter</Value></Duration>
+      <Note><String>6</String><Fret>0</Fret><Velocity>100</Velocity><PalmMute>true</PalmMute></Note>
+      <Note><String>5</String><Fret>2</Fret><Velocity>90</Velocity><Harmonic>true</Harmonic></Note>
+    </Beat></Measure>
+  </Track>
+</Score>

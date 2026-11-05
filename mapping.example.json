@@ -1,0 +1,14 @@
+{
+  "default_channel": 1,
+  "string_channels": {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6},
+  "techniques": {
+    "palm_mute": {"events": [{"type": "keyswitch", "note": 24, "velocity": 127}]},
+    "artificial_harmonic": {"events": [{"type": "keyswitch", "note": 25, "velocity": 127}]},
+    "vibrato": {"events": [{"type": "cc", "controller": 1, "value": 80}]},
+    "bend": {"events": [{"type": "cc", "controller": 1, "value": 100}]}
+  },
+  "combinations": [
+    {"when": ["palm_mute", "artificial_harmonic"], "events": [{"type": "keyswitch", "note": 26, "velocity": 127}]},
+    {"when": ["slide", "vibrato"], "events": [{"type": "keyswitch", "note": 27, "velocity": 127}]}
+  ]
+}

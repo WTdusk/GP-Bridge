@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "gpbridge": {
+      "command": "C:/Users/YOUR_NAME/AppData/Local/Programs/GP Bridge/GPBridgeMCP.exe",
+      "args": []
+    }
+  }
+}

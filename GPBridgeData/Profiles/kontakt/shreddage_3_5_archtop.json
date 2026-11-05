@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "preset_name": "Shreddage 3.5 Archtop - TACT defaults",
+  "vendor": "Impact Soundworks",
+  "library": "Shreddage 3.5 Archtop",
+  "instrument": "Shreddage 3.5 Archtop (default TACT mappings)",
+  "kontakt_version": "Kontakt version required by the installed Shreddage 3.5 Archtop patch",
+  "library_version": "3.5",
+  "source": {
+    "document": "Manual.pdf",
+    "pages": [10, 19, 22, 26, 32, 33, 34],
+    "octave_convention": "Kontakt manual convention: C-2 = MIDI note 0; C0 = 24; C3 = 60",
+    "confidence": "documented",
+    "notes": "This profile uses the documented default TACT key assignments. Per-articulation mappings are customizable in the instrument, so changed user mappings will not match this profile."
+  },
+  "octave_convention": "Kontakt manual convention: C-2 = MIDI note 0; C0 = 24; C3 = 60",
+  "default_channel": 1,
+  "split_tracks": true,
+  "unassigned_channel": 16,
+  "strum_channel": 15,
+  "string_channels": {
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6
+  },
+  "legato_overlap_ticks": 5,
+  "slide_overlap_ticks": 120,
+  "legato_max_interval_semitones": 2,
+  "kontakt_setup": {
+    "midi_guitar_mode": true,
+    "midi_input": "OMNI",
+    "string_channel_order": "Guitar Pro string 1 (highest pitch) -> MIDI channel 1; string 6 (lowest pitch) -> MIDI channel 6",
+    "mapping_scope": "Default TACT articulation keys only; additional behavioral, FX, picking, and strumming keys are documented but are not emitted automatically by GP Bridge."
+  },
+  "techniques": {
+    "palm_mute": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 25,
+          "velocity": 127,
+          "duration_ticks": 1,
+          "offset_ticks": -1
+        }
+      ],
+      "source_pages": [32],
+      "confidence": "documented",
+      "evidence": "The manual maps the Mute articulation to C#0 and states that its mute degree is controlled by velocity."
+    },
+    "staccato": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 26,
+          "velocity": 127,
+          "duration_ticks": 1,
+          "offset_ticks": -1
+        }
+      ],
+      "source_pages": [32],
+      "confidence": "documented",
+      "evidence": "The manual maps short unmuted notes to the Staccato articulation at D0."
+    },
+    "tremolo": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 30,
+          "velocity": 127,
+          "duration_ticks": 1,
+          "offset_ticks": -1
+        }
+      ],
+      "source_pages": [32],
+      "confidence": "documented",
+      "evidence": "The manual maps rapid repeated picking to the Tremolo articulation at F#0."
+    },
+    "natural_harmonic": {
+      "events": [
+        {"type": "keyswitch", "note": 32, "velocity": 127, "duration_ticks": 1, "offset_ticks": -1}
+      ],
+      "source_pages": [32],
+      "confidence": "documented",
+      "evidence": "The manual maps Natural Harmonics to G#0."
+    },
+    "artificial_harmonic": {
+      "events": [
+        {"type": "keyswitch", "note": 33, "velocity": 127, "duration_ticks": 1, "offset_ticks": -1}
+      ],
+      "source_pages": [32],
+      "confidence": "documented",
+      "evidence": "The manual maps Artificial Harmonics to A0."
+    },
+    "tapping": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 34,
+          "velocity": 127,
+          "duration_ticks": 1,
+          "offset_ticks": -1
+        }
+      ],
+      "source_pages": [32],
+      "confidence": "documented",
+      "evidence": "The manual maps the Tapping articulation to A#0 and describes it as hammer-on-only playback."
+    },
+    "slide": {
+      "events": [
+        {
+          "type": "keyswitch",
+          "note": 36,
+          "velocity": 127,
+          "duration_ticks": 1,
+          "offset_ticks": -1
+        }
+      ],
+      "source_pages": [34],
+      "confidence": "documented",
+      "evidence": "The manual assigns C1 to the dedicated slide transition between the current note and the next note."
+    },
+    "vibrato": {
+      "events": [
+        {
+          "type": "cc",
+          "controller": 1,
+          "value": 127,
+          "reset_at_note_off": true,
+          "reset_value": 0,
+          "offset_ticks": -1
+        }
+      ],
+      "source_pages": [10],
+      "confidence": "documented",
+      "evidence": "The manual identifies modwheel CC1 as a selectable vibrato controller; this mapping assumes the patch is configured for CC1."
+    },
+    "bend": {
+      "events": [],
+      "pitch_bend_range_semitones": 2,
+      "max_bend_semitones": 2,
+      "value_scale": "gp_percent_full_step",
+      "upward_only": true,
+      "pitch_bend_step_ticks": 10,
+      "source_pages": [10],
+      "confidence": "documented",
+      "evidence": "The manual sets the default MIDI pitch-bend range to plus or minus two semitones. GP bend heights are normalized as percentages of a full step by the converter, then rendered as an upward-only timed pitch-wheel curve; 25 and 50 represent 0.5 and 1 semitone, with a +2 semitone clamp."
+    },
+    "hammer_on": {
+      "events": [],
+      "source_pages": [22, 33],
+      "confidence": "documented",
+      "evidence": "The manual triggers hammer-on transitions through overlapping notes on the same string; the converter adds the configured short overlap."
+    },
+    "pull_off": {
+      "events": [],
+      "source_pages": [22, 33],
+      "confidence": "documented",
+      "evidence": "The manual triggers pull-off transitions through overlapping notes on the same string; the converter adds the configured short overlap."
+    }
+  },
+  "combinations": [],
+  "unsupported": [],
+  "ambiguities": [
+    {
+      "technique": "harmonic",
+      "reason": "A generic Guitar Pro harmonic marker defaults to Artificial Harmonics (A0 / MIDI 33), because the marker does not identify Natural Harmonics. Use an explicit Natural Harmonic marker when G#0 / MIDI 32 is intended."
+    },
+    {
+      "technique": "palm_mute_velocity",
+      "reason": "The manual says velocity controls mute depth. This profile preserves Guitar Pro velocity without a custom velocity curve; confirm the patch's TACT velocity mapping if a specific mute depth is required."
+    }
+  ],
+  "documented_but_not_automated": {
+    "articulation_keyswitches": {
+      "sustain_and_rake": "C0 (MIDI 24); Sustain defaults to velocity 1-119 and Rake to 120-127",
+      "power_chord_sustain": "E0 (MIDI 28)",
+      "power_chord_mute": "F0 (MIDI 29)",
+      "choke": "G0 (MIDI 31)",
+      "natural_harmonics": "G#0 (MIDI 32)",
+      "artificial_harmonics": "A0 (MIDI 33)",
+      "tapping": "A#0 (MIDI 34)"
+    },
+    "behavioral_and_fx_keyswitches": {
+      "force_string": "C-2 through F-2 (MIDI 0-5), lowest E/string 6 upward",
+      "disable_force_string": "F#-2 (MIDI 6)",
+      "legato_on": "D-1 (MIDI 14)",
+      "legato_off": "D#-1 (MIDI 15)",
+      "force_hand_position": "A#-1 (MIDI 22), velocity selects hand position",
+      "automatic_hand_position": "B-1 (MIDI 23)",
+      "slide_transition": "C1 (MIDI 36)",
+      "fret_noise": "C#1 (MIDI 37)",
+      "slide_note": "D1 (MIDI 38)",
+      "thrash_note": "D#1 (MIDI 39)"
+    }
+  }
+}

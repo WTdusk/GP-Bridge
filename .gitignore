@@ -1,0 +1,41 @@
+# Python environments and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.buildenv/
+
+# Local tool state and scratch dependencies
+.appdata/
+.dotnet-home/
+.agents/
+.codex/
+.preset-repository/
+tmp/
+JUCE-*/
+*.log
+.env
+.env.*
+!.env.example
+
+# Build output (publish binaries through GitHub Releases)
+build/
+dist/
+dist-next/
+installer/bin/
+installer/obj/
+installer/package-stage/
+installer/payload.zip
+*.lnk
+
+# Runtime data; retain only the reviewed bundled profile
+GPBridgeData/*
+!GPBridgeData/Profiles/
+GPBridgeData/Profiles/*
+!GPBridgeData/Profiles/kontakt/
+GPBridgeData/Profiles/kontakt/*
+!GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.json
+!GPBridgeData/Profiles/kontakt/shreddage_3_5_archtop.verification.md
+examples/*.mid
+examples/*.report.json
